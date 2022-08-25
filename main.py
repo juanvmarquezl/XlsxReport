@@ -21,7 +21,7 @@ rpt.add_book_page('page1', page1)
 
 # Create & assign WorkSheet table
 table1 = XlsxTable(sample)
-table1.start_at_row = 4
+table1.start_at_row = page1.after_page_titles(2)
 
 page1.add_page_table('table1', table1)
 

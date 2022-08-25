@@ -24,7 +24,7 @@ with open(file_name, encoding='utf-8') as csv_file:
     sample = [dict(x) for x in csv_data]
 
 table1 = XlsxTable(sample)
-table1.start_at_row = 8
+table1.start_at_row = page1.after_page_titles()
 table1.cols_setup = {
     'Car': {
         'type': str,
@@ -44,7 +44,11 @@ table1.cols_setup = {
         'type': float,
         'format': {'num_format': '#,##0.00'},
     },
-    'Cyl Disp': {},
+    'Cyl Displac': {
+        'type': float,
+        'format': {'num_format': '#,##0.00'},
+        'formula': '{{Cylinders}}/{{Displacement}}',
+    },
     'Horsepower': {
         'type': float,
         'format': {'num_format': '#,##0.00'},

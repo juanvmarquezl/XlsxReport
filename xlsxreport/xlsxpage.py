@@ -27,6 +27,10 @@ class XlsxPage:
         self._titles_at_col = col
 
 
+    def after_page_titles(self, plus_rows:int=1) -> int:
+        return len(self.titles) + plus_rows
+
+
     def write_page(self):
         if not self.titles:
             return
