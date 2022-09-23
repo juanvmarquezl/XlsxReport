@@ -1,5 +1,7 @@
 import uuid
 import xlsxwriter
+import re
+
 
 class XlsxTable:
     """
@@ -74,7 +76,6 @@ class XlsxTable:
         col = self.start_at_col
 
         for key, value in self.cols_setup.items():
-            print(value)
             val  = line.get(key)
             type = value.get('type')
             if not value.get('formula'):  # get value
@@ -82,7 +83,18 @@ class XlsxTable:
                 self._worksheet.write(
                     row, col, cell_val, self._get_format(key))
             elif value.get('formula'):  # Write formula
-                print(value['formula'])
+                cell_formula = value['formula']
+                regex = '{{(.+?)}}'
+                cols = re.findall(regex, cell_formula)
+                for c in cols:
+                    repl_a = '{{%s}}' % c
+                    repl_b = self.cols_setup.get(c, {}).get('col_letter')
+                    if repl_a and repl_b:
+                        repl_b = repl_b + str(row + 1)
+                    cell_formula = '=' + cell_formula.replace(repl_a, repl_b)
+                self._worksheet.write(
+                    row, col, cell_formula, self._get_format(key))
+
             col +=1
         self.last_row = row
 
@@ -103,7 +115,7 @@ class XlsxTable:
         for key, value in self.cols_setup.items():
             if value.get('width'):
                 self._worksheet.set_column(col, col, value['width'])
-            value['col_name'] = xlsxwriter.utility.xl_col_to_name(col)
+            value['col_letter'] = xlsxwriter.utility.xl_col_to_name(col)
             col += 1
         return True
 

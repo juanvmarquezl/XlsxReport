@@ -45,11 +45,6 @@ table1.cols_setup = {
         'type': float,
         'format': {'num_format': '#,##0.00'},
     },
-    'Cyl Displac': {
-        'type': float,
-        'format': {'num_format': '#,##0.00'},
-        'formula': '{{Cylinders}}/{{Displacement}}',
-    },
     'Horsepower': {
         'type': float,
         'format': {'num_format': '#,##0.00'},
@@ -58,6 +53,12 @@ table1.cols_setup = {
         'type': float,
         'format': {'num_format': '#,##0.00'},
     },
+    'HP/W Ratio': {
+        'type': float,
+        'format': {'num_format': '#,##0.00'},
+        'formula': '{{Horsepower}}/{{Weight}}',
+    },
+
     'Acceleration': {
         'type': float,
         'width': 11.5,
