@@ -1,4 +1,5 @@
 import uuid
+import xlsxwriter
 
 class XlsxTable:
     """
@@ -58,8 +59,6 @@ class XlsxTable:
 
     def _write_headers(self, row):
         self.header_row = row
-        if not self.headers and self.table_data:
-            self.headers = self.table_data[0].keys()
         for col in range(len(self.headers)):
             self._worksheet.write(
                 row, self.start_at_col + col, list(self.headers)[col])
@@ -74,11 +73,16 @@ class XlsxTable:
             self.first_row = row
         col = self.start_at_col
 
-        for key, val in line.items():
-            type = self.cols_setup.get(key, {}).get('type')
-            cell_val = self._convert_cell_value(val, type)
-            self._worksheet.write(
-                row, col, cell_val, self._get_format(key))
+        for key, value in self.cols_setup.items():
+            print(value)
+            val  = line.get(key)
+            type = value.get('type')
+            if not value.get('formula'):  # get value
+                cell_val = self._convert_cell_value(val, type)
+                self._worksheet.write(
+                    row, col, cell_val, self._get_format(key))
+            elif value.get('formula'):  # Write formula
+                print(value['formula'])
             col +=1
         self.last_row = row
 
@@ -91,11 +95,15 @@ class XlsxTable:
     def before_write_table(self):
         if not self.cols_setup and self.table_data:
             self.cols_setup = {k: {} for k in self.table_data[0].keys()}
-        col = self.start_at_col
+        # Set table headers
+        if not self.headers and self.table_data:
+            self.headers = self.cols_setup.keys()
         # Set columns width to default
+        col = self.start_at_col
         for key, value in self.cols_setup.items():
             if value.get('width'):
                 self._worksheet.set_column(col, col, value['width'])
+            value['col_name'] = xlsxwriter.utility.xl_col_to_name(col)
             col += 1
         return True
 
