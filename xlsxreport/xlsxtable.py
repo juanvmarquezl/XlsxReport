@@ -24,9 +24,15 @@ class XlsxTable:
                     'bold': True,
                     'text_wrap': True,
                     },  # cell format*
+                'formula': '{{col_dict_key}}operator{{col_dict_key}}',
             },
             ...
         }
+
+    formula:
+        You can add column's formulas unsing double brackets {{col_dict_key}} to identify
+        column with any valid excel formula, XlsxReport will change column identifier
+        with excel's cell identifier. See /examples
 
     * for more info about cell format see:
         https://xlsxwriter.readthedocs.io/format.html
