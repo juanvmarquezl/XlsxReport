@@ -25,6 +25,7 @@ with open(file_name, encoding='utf-8') as csv_file:
 
 table1 = XlsxTable(sample)
 table1.start_at_row = page1.after_page_titles()
+table1.start_at_col = 1
 table1.cols_setup = {
     'Car': {
         'type': str,
@@ -44,11 +45,11 @@ table1.cols_setup = {
         'type': float,
         'format': {'num_format': '#,##0.00'},
     },
-    'Cyl Displac': {
-        'type': float,
-        'format': {'num_format': '#,##0.00'},
-        'formula': '{{Cylinders}}/{{Displacement}}',
-    },
+#    'Cyl Displac': {
+#        'type': float,
+#        'format': {'num_format': '#,##0.00'},
+#        'formula': '{{Cylinders}}/{{Displacement}}',
+#    },
     'Horsepower': {
         'type': float,
         'format': {'num_format': '#,##0.00'},
@@ -59,16 +60,17 @@ table1.cols_setup = {
     },
     'Acceleration': {
         'type': float,
+        'width': 11.5,
         'format': {'num_format': '#,##0.00'},
     },
     'Model': {
         'type': int,
         'width': 7,
-        'format': {'num_format': '#,##0'},
+        'format': {'num_format': '#,##0', 'align': 'center'},
     },
     'Origin': {
         'type': str,
-        'width': 7,
+        'width': 10,
         'format': {'align': 'center'},
     },
 }

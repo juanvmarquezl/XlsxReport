@@ -61,7 +61,8 @@ class XlsxTable:
         if not self.headers and self.table_data:
             self.headers = self.table_data[0].keys()
         for col in range(len(self.headers)):
-            self._worksheet.write(row, col, list(self.headers)[col])
+            self._worksheet.write(
+                row, self.start_at_col + col, list(self.headers)[col])
 
 
     def _convert_cell_value(self, value, type):
@@ -90,6 +91,12 @@ class XlsxTable:
     def before_write_table(self):
         if not self.cols_setup and self.table_data:
             self.cols_setup = {k: {} for k in self.table_data[0].keys()}
+        col = self.start_at_col
+        # Set columns width to default
+        for key, value in self.cols_setup.items():
+            if value.get('width'):
+                self._worksheet.set_column(col, col, value['width'])
+            col += 1
         return True
 
 
