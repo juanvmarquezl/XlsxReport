@@ -18,7 +18,7 @@ page1.titles = [
 rpt.add_book_page('page1', page1)
 
 # load & assign WorkSheet table
-file_name = 'examples/cars.csv'
+file_name = os.path.join('examples', 'data', 'cars.csv')
 with open(file_name, encoding='utf-8') as csv_file:
     csv_data = csv.DictReader(csv_file, delimiter=';')
     sample = [dict(x) for x in csv_data]
