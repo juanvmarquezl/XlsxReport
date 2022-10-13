@@ -14,6 +14,7 @@ class XlsxTable:
             'col_dict_key': {
                 'width': 30,  # Column with (xls with units)
                 'type': float,  # Python cell's data type
+                'title': str,  # Col's title
                 'format': {
                     'num_format': '@',
                     'font_size': 10,
@@ -50,26 +51,33 @@ class XlsxTable:
         self.first_row = None
         self.last_row = None
         self.cols_setup = {}
+        self._formats = {}
+        self._extra_formats = {}
+        self._table_titles_format = None
 
 
     def _set_workbook_formats(self):
-        self.formats = {}
+
         for key in self.cols_setup.keys():
             format = self.cols_setup[key].get('format', None)
-            self.formats.update(
+            self._formats.update(
+                {key: self._workbook.add_format(format)})
+        for key, format in self._extra_formats.items():
+            self._formats.update(
                 {key: self._workbook.add_format(format)})
         return True
 
 
     def _get_format(self, key):
-        return self.formats.get(key)
+        return self._formats.get(key)
 
 
     def _write_headers(self, row):
         self.header_row = row
+        format = self._get_format(self._table_titles_format)
         for col in range(len(self.headers)):
             self._worksheet.write(
-                row, self.start_at_col + col, list(self.headers)[col])
+                row, self.start_at_col + col, list(self.headers)[col], format)
 
 
     def _convert_cell_value(self, value, type):
@@ -85,9 +93,10 @@ class XlsxTable:
             val  = line.get(key)
             type = value.get('type')
             if not value.get('formula'):  # get value
-                cell_val = self._convert_cell_value(val, type)
-                self._worksheet.write(
-                    row, col, cell_val, self._get_format(key))
+                if val:
+                    cell_val = self._convert_cell_value(val, type)
+                    self._worksheet.write(
+                        row, col, cell_val, self._get_format(key))
             elif value.get('formula'):  # Write formula
                 cell_formula = value['formula']
                 regex = '{{(.+?)}}'
@@ -110,19 +119,41 @@ class XlsxTable:
         self._worksheet = ws
 
 
+    def add_workbook_format(self, name, format):
+        """
+        Define a new format for cells
+        """
+        self._extra_formats.update(
+            {name: format})
+        return True
+
+
+    def set_table_titles_format(self, name):
+        """
+        Assign format's name for table titles
+        """
+        self._table_titles_format = name
+        return True
+
+
     def before_write_table(self):
         if not self.cols_setup and self.table_data:
             self.cols_setup = {k: {} for k in self.table_data[0].keys()}
         # Set table headers
         if not self.headers and self.table_data:
-            self.headers = self.cols_setup.keys()
+            self.headers = list(self.cols_setup.keys())
         # Set columns width to default
         col = self.start_at_col
+        idx_col = 0
         for key, value in self.cols_setup.items():
             if value.get('width'):
                 self._worksheet.set_column(col, col, value['width'])
+            if value.get('title'):
+                self.headers[idx_col] = value.get('title')
             value['col_letter'] = xlsxwriter.utility.xl_col_to_name(col)
             col += 1
+            idx_col += 1
+
         return True
 
 
