@@ -1,10 +1,10 @@
-from xlsxreport import XlsxReport, XlsxPage, XlsxTable
+from XlsxReport import XlsxReport, XlsxPage, XlsxTable
 import csv
 import os
 
 
 # Create report object
-rpt = XlsxReport('output/basic_table.xlsx')
+rpt = XlsxReport('basic_table.xlsx')
 
 # Create & assign Workbook page
 page1 = XlsxPage('Cars')

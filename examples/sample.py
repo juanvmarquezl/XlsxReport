@@ -1,7 +1,7 @@
-from xlsxreport import XlsxReport, XlsxPage, XlsxTable
+from XlsxReport import XlsxReport, XlsxPage, XlsxTable
 
 # Create report object
-rpt = XlsxReport('output\excel_file_name.xlsx')
+rpt = XlsxReport('excel_file_name.xlsx')
 
 # Create & assign Workbook page
 page = XlsxPage('Sheet1')

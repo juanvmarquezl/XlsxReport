@@ -1,3 +1,3 @@
-from xlsxreport.xlsxreport import XlsxReport
-from xlsxreport.xlsxpage import XlsxPage
-from xlsxreport.xlsxtable import XlsxTable
+from XlsxReport.xlsxreport import XlsxReport
+from XlsxReport.xlsxpage import XlsxPage
+from XlsxReport.xlsxtable import XlsxTable

@@ -18,7 +18,6 @@ class XlsxReport:
         """
         Add pages & tables to XlsxReport
         """
-        print(self.pages)
         for pg in self.pages:
 
             page = getattr(self, pg.get('name'))
