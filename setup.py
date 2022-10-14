@@ -39,3 +39,9 @@ setup(
     include_package_data=True,
     install_requires=['XlsxWriter>=3.0.3']
 )
+
+# Compile setup file
+#   python setup.py sdist bdist_wheel
+
+# test XlsxReport in test.pypi
+#   twine upload --repository-url https://test.pypi.org/legacy/ dist/*
