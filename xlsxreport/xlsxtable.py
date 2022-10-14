@@ -57,7 +57,8 @@ class XlsxTable:
 
 
     def _set_workbook_formats(self):
-
+        '''
+        '''
         for key in self.cols_setup.keys():
             format = self.cols_setup[key].get('format', None)
             self._formats.update(
@@ -84,6 +85,30 @@ class XlsxTable:
         return type(value) if type else value
 
 
+    def _gen_cell_formula(self, cell_value, cell_row):
+        '''
+        Generate formula by replace {{col_dict_key}} with excel's cell ref
+
+        General format:
+            {{col_dict_key}}operator{{col_dict_key}}
+
+        Samples:
+            'formula': '={{col_dict_key1}}*{{col_dict_key2}}',
+            'formula': '=SUM({{col_dict_key1}}:{{col_dict_key2}})',
+
+        '''
+        cell_formula = cell_value['formula']
+        regex = '{{(.+?)}}'
+        cols = re.findall(regex, cell_formula)
+        for c in cols:
+            repl_a = '{{%s}}' % c
+            repl_b = self.cols_setup.get(c, {}).get('col_letter')
+            if repl_a and repl_b:
+                repl_b = repl_b + str(cell_row + 1)
+            cell_formula = cell_formula.replace(repl_a, repl_b)
+        return cell_formula if cell_formula[0] == '=' else '=' + cell_formula
+
+
     def _write_data_row(self, row, line):
         if self.first_row == None:
             self.first_row = row
@@ -98,15 +123,7 @@ class XlsxTable:
                     self._worksheet.write(
                         row, col, cell_val, self._get_format(key))
             elif value.get('formula'):  # Write formula
-                cell_formula = value['formula']
-                regex = '{{(.+?)}}'
-                cols = re.findall(regex, cell_formula)
-                for c in cols:
-                    repl_a = '{{%s}}' % c
-                    repl_b = self.cols_setup.get(c, {}).get('col_letter')
-                    if repl_a and repl_b:
-                        repl_b = repl_b + str(row + 1)
-                    cell_formula = '=' + cell_formula.replace(repl_a, repl_b)
+                cell_formula = self._gen_cell_formula(value, row)
                 self._worksheet.write(
                     row, col, cell_formula, self._get_format(key))
 
