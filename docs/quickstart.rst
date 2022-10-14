@@ -12,7 +12,7 @@ A minimal XlsxReport looks something like this:
 
 .. code-block:: python
 
-    from xlsxreport import XlsxReport, XlsxPage, XlsxTable
+    from XlsxReport import XlsxReport, XlsxPage, XlsxTable
 
     # Create report object (Excel's file)
     rpt = XlsxReport('excel_file_name.xlsx')
@@ -34,19 +34,10 @@ A minimal XlsxReport looks something like this:
 
     # Define table layout (Use same cols as in data)
     table.cols_setup = {
-        'First Name': {
-            'type': str,
-            'width': 15,
-        },
-        'Last Name': {
-            'type': str,
-            'width': 15,
-        },
-        'Age': {
-            'type': int,
-            'width': 10,
-        },
-    }
+        'First Name': {'type': str, 'width': 15},
+        'Last Name': {'type': str, 'width': 15},
+        'Age': {'type': int, 'width': 10},
+        }
 
     # Create Excel's file
     rpt.generate()
