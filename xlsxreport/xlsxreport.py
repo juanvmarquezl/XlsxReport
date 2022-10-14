@@ -18,7 +18,9 @@ class XlsxReport:
         """
         Add pages & tables to XlsxReport
         """
+        print(self.pages)
         for pg in self.pages:
+
             page = getattr(self, pg.get('name'))
             ws = wb.add_worksheet(page.page_name)
             page.set_workbook_worksheet(wb, ws)
