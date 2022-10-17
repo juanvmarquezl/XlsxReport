@@ -15,8 +15,8 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="XlsxReport",
-    version="0.0.8",
-    description="Simple Excel report tool",
+    version="0.0.9",
+    description="Simple Excel Reports Tool",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/juanvmarquezl/XlsxReport",
@@ -25,6 +25,9 @@ setup(
     license="MIT",
     classifiers=[
         "Intended Audience :: Developers",
+        "Intended Audience :: Information Technology","
+        "Intended Audience :: Other Audience",
+        "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
