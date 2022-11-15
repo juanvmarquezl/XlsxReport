@@ -1,4 +1,4 @@
-from XlsxReport.xlsxreport import XlsxReport
-from XlsxReport.xlsxpage import XlsxPage
-from XlsxReport.xlsxtable import XlsxTable
-from XlsxReport.xlsxtools import set_col_format, set_cell_format
+from xlsxreport.xlsxreport import XlsxReport
+from xlsxreport.xlsxpage import XlsxPage
+from xlsxreport.xlsxtable import XlsxTable
+from xlsxreport.xlsxtools import set_col_format, set_cell_format
