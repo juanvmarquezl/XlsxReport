@@ -25,7 +25,7 @@ setup(
     license="MIT",
     classifiers=[
         "Intended Audience :: Developers",
-        "Intended Audience :: Information Technology","
+        "Intended Audience :: Information Technology",
         "Intended Audience :: Other Audience",
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
