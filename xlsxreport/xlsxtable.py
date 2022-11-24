@@ -122,6 +122,9 @@ class XlsxTable:
                     cell_val = self._convert_cell_value(val, type)
                     self._worksheet.write(
                         row, col, cell_val, self._get_format(key))
+                else:
+                    self._worksheet.write(
+                        row, col, None, self._get_format(key))
             elif value.get('formula'):  # Write formula
                 cell_formula = self._gen_cell_formula(value, row)
                 self._worksheet.write(
@@ -182,4 +185,3 @@ class XlsxTable:
                 self._write_headers(row)
             row += 1
             self._write_data_row(row, item)
-
