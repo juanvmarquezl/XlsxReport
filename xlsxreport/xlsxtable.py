@@ -1,6 +1,9 @@
 import uuid
 import xlsxwriter
 import re
+from datetime import datetime
+
+
 
 
 class XlsxTable:
@@ -53,7 +56,7 @@ class XlsxTable:
         self.cols_setup = {}
         self._formats = {}
         self._extra_formats = {}
-        self._table_titles_format = None
+        self._table_headers_format = None
 
 
     def _set_workbook_formats(self):
@@ -74,14 +77,19 @@ class XlsxTable:
 
 
     def _write_headers(self, row):
+        """
+        Write & format table headers
+        """
         self.header_row = row
-        format = self._get_format(self._table_titles_format)
+        format = self._get_format(self._table_headers_format)
         for col in range(len(self.headers)):
             self._worksheet.write(
                 row, self.start_at_col + col, list(self.headers)[col], format)
 
 
     def _convert_cell_value(self, value, type):
+        if type == datetime:
+            return value
         return type(value) if type else value
 
 
@@ -148,11 +156,11 @@ class XlsxTable:
         return True
 
 
-    def set_table_titles_format(self, name):
+    def set_table_headers_format(self, name):
         """
-        Assign format's name for table titles
+        Assign format's name for table headers
         """
-        self._table_titles_format = name
+        self._table_headers_format = name
         return True
 
 
