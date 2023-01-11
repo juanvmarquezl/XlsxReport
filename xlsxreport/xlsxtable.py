@@ -29,6 +29,7 @@ class XlsxTable:
                     'text_wrap': True,
                     },  # cell format*
                 'formula': '{{col_dict_key}}operator{{col_dict_key}}',
+                'internal_link_c2p': create a internal link from cell to page
             },
             ...
         }
@@ -128,6 +129,10 @@ class XlsxTable:
             if not value.get('formula'):  # get value
                 if val:
                     cell_val = self._convert_cell_value(val, type)
+                    if self.cols_setup[key].get('internal_link_c2p'):
+                        _link = self.cols_setup[key].get('internal_link_c2p')
+                        self._worksheet.write(
+                            row, col, f"internal:'{cell_val}'!{_link}", self._get_format(key))
                     self._worksheet.write(
                         row, col, cell_val, self._get_format(key))
                 else:
@@ -137,7 +142,6 @@ class XlsxTable:
                 cell_formula = self._gen_cell_formula(value, row)
                 self._worksheet.write(
                     row, col, cell_formula, self._get_format(key))
-
             col +=1
         self.last_row = row
 
@@ -193,3 +197,4 @@ class XlsxTable:
                 self._write_headers(row)
             row += 1
             self._write_data_row(row, item)
+
