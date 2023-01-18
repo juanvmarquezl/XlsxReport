@@ -12,7 +12,7 @@ See the following sections for more information:
 
 - :doc:`installation`
 - :doc:`quickstart`
-- :doc:`cell_format`
+- :doc:`cellformat`
 
 User's Guide
 ------------
