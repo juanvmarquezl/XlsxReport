@@ -12,15 +12,37 @@ Column with int (xls with units)
 type
 ----
 
- Python cell's data type: str, float, int ...
+Python cell's data type: str, float, int ...
 
+title
+-----
 
- title
- -----
+Col's title
 
- Col's title
+format
+------
 
- format
- ------
+Set cell font attr:
 
- Set cell font attr:
+ - num_format
+ - font_size
+ - font_color
+ - bg_color
+ - align
+ - valign
+ - bold
+ - text_wrap
+
+formula
+-------
+
+Any Ecxel's formula
+
+internal_link
+-------------
+
+Can be used to create an internal link to other book's page when cell value = page name
+
+Must indicate a destination cell: 'A2'
+
+Back to :doc:`index`
