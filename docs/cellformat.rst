@@ -1,5 +1,5 @@
 Formating table cells
 =====================
 
-Please follow these steps to generate your first XlsxReport
-Check :doc:`installation` to install XlsxReport first.
+Cell's are formatted in **table.cols_setup** dict, you can define one or more attributes
+as you need:
