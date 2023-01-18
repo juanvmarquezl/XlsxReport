@@ -44,3 +44,5 @@ internal_link
 Can be used to create an internal link to other book's page when cell value = page name
 
 Must indicate a destination cell: 'A2'
+
+Back to :doc:`index`
