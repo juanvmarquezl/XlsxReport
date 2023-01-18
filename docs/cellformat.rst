@@ -8,3 +8,19 @@ width
 -----
 
 Column with int (xls with units)
+
+type
+----
+
+ Python cell's data type: str, float, int ...
+
+
+ title
+ -----
+
+ Col's title
+
+ format
+ ------
+
+ Set cell font attr:
