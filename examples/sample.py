@@ -1,4 +1,4 @@
-from XlsxReport import XlsxReport, XlsxPage, XlsxTable
+from xlsxreport import XlsxReport, XlsxPage, XlsxTable
 
 # Create report object
 rpt = XlsxReport('excel_file_name.xlsx')
