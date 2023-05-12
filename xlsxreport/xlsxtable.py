@@ -8,7 +8,37 @@ from datetime import datetime
 
 class XlsxTable:
     """
-    #Declares an excel table
+    This module provides a class for creating and writing Excel tables.
+
+    The XlsxTable class represents an Excel table. It can be used to create and write Excel tables.
+
+    Attributes
+
+        table_data: The data for the table. This is a list of dictionaries, where each dictionary represents a row in the table.
+        cols_setup: The column setup for the table. This is a dictionary, where the keys are the column names and the values are the column settings.
+        _workbook: The Excel workbook object.
+        _worksheet: The Excel worksheet object.
+        start_at_row: The row number where the table should start.
+        start_at_col: The column number where the table should start.
+        headers: The headers for the table. This is a list of strings, where each string is the header for a column.
+        header_row: The row number where the headers are located.
+        first_row: The row number where the data starts.
+        last_row: The row number where the data ends.
+
+    Methods
+
+        __init__(self, table_data): The constructor for the XlsxTable class.
+        _set_workbook_formats(): Sets the workbook formats for the table.
+        _get_format(self, key): Gets the format for a column.
+        _write_headers(self, row): Writes the headers for the table.
+        _convert_cell_value(self, value, type): Converts a cell value to the correct type.
+        _gen_cell_formula(self, cell_value, cell_row): Generates a formula for a cell.
+        _write_data_row(self, row, line): Writes a row of data to the table.
+        set_workbook_worksheet(self, wb, ws): Sets the workbook and worksheet objects for the table.
+        add_workbook_format(self, name, format): Adds a workbook format to the table.
+        set_table_headers_format(self, name): Sets the format for the table headers.
+        before_write_table(self): Performs actions before writing the table.
+        write_table(self): Writes the table to the workbook.
 
     ##cols_setup:
     This dict contains all cell (column) setup
