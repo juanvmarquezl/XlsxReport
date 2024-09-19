@@ -58,6 +58,7 @@ class XlsxReport:
                 table.set_workbook_worksheet(wb, ws)
                 table.before_write_table()
                 table.write_table()
+                table.after_write_table()
 
 
     def add_book_page(self, name, page):

@@ -29,7 +29,7 @@ class XlsxPage:
         Args:
             page_name (str): The name of the Excel page to create.
         """
-        self.page_name = page_name
+        self.page_name = page_name[:31]  # only 31 chars allowed
         self.tables = []
         self.titles = []
         self.titles_at(0, 0)

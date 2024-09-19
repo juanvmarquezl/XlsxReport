@@ -2,6 +2,8 @@ import uuid
 import xlsxwriter
 import re
 from datetime import datetime
+import math
+import numbers
 
 
 
@@ -60,6 +62,7 @@ class XlsxTable:
                     },  # cell format*
                 'formula': '{{col_dict_key}}operator{{col_dict_key}}',
                 'internal_link_c2p': create a internal link from cell to page
+                'has_summary': 'SUM', # cell has summary False if not. (see after_write_table)
             },
             ...
         }
@@ -68,6 +71,11 @@ class XlsxTable:
         You can add column's formulas unsing double brackets {{col_dict_key}} to identify
         column with any valid excel formula, XlsxReport will change column identifier
         with excel's cell identifier. See /examples
+
+    ##autofilter:
+        add:
+            table.autofilter = True
+        to enable autofilter
 
     * for more info about cell format see:
         https://xlsxwriter.readthedocs.io/format.html
@@ -83,11 +91,12 @@ class XlsxTable:
         self.headers = []
         self.header_row = None
         self.first_row = None
-        self.last_row = None
+        self.last_row = 0
         self.cols_setup = {}
         self._formats = {}
         self._extra_formats = {}
         self._table_headers_format = None
+        self.autofilter = False
 
 
     def _set_workbook_formats(self):
@@ -121,10 +130,12 @@ class XlsxTable:
     def _convert_cell_value(self, value, type):
         if type == datetime:
             return value
+        if isinstance(value, numbers.Number) and  math.isnan(value):
+            return None
         return type(value) if type else value
 
 
-    def _gen_cell_formula(self, cell_value, cell_row):
+    def _gen_cell_formula(self, cell_value, cell_row, key, line):
         '''
         Generate formula by replace {{col_dict_key}} with excel's cell ref
 
@@ -135,16 +146,29 @@ class XlsxTable:
             'formula': '={{col_dict_key1}}*{{col_dict_key2}}',
             'formula': '=SUM({{col_dict_key1}}:{{col_dict_key2}})',
 
+        You can add .value tag to {{field.value}}
+        if you need to get field's value instead cell reference
         '''
         cell_formula = cell_value['formula']
         regex = '{{(.+?)}}'
         cols = re.findall(regex, cell_formula)
         for c in cols:
-            repl_a = '{{%s}}' % c
-            repl_b = self.cols_setup.get(c, {}).get('col_letter')
-            if repl_a and repl_b:
-                repl_b = repl_b + str(cell_row + 1)
-            cell_formula = cell_formula.replace(repl_a, repl_b)
+            if '.value' in c:
+                '''
+                If .value added to formula ex. {{field.value}}
+                the field's value is added instead a cell reference
+                '''
+                value_key = c.split('.')[0]
+                val  = line.get(value_key)
+                repl_a = '{{%s}}' % c
+                repl_b = f'{val}'
+                cell_formula = cell_formula.replace(repl_a, repl_b)
+            else:
+                repl_a = '{{%s}}' % c
+                repl_b = self.cols_setup.get(c, {}).get('col_letter')
+                if repl_a and repl_b:
+                    repl_b = repl_b + str(cell_row + 1)
+                cell_formula = cell_formula.replace(repl_a, repl_b)
         return cell_formula if cell_formula[0] == '=' else '=' + cell_formula
 
 
@@ -169,7 +193,7 @@ class XlsxTable:
                     self._worksheet.write(
                         row, col, None, self._get_format(key))
             elif value.get('formula'):  # Write formula
-                cell_formula = self._gen_cell_formula(value, row)
+                cell_formula = self._gen_cell_formula(value, row, key, line)
                 self._worksheet.write(
                     row, col, cell_formula, self._get_format(key))
             col +=1
@@ -228,3 +252,25 @@ class XlsxTable:
             row += 1
             self._write_data_row(row, item)
 
+
+    def after_write_table(self):
+        row = self.last_row + 1
+        col = self.start_at_col
+        for key, value in self.cols_setup.items():
+            if value.get('has_summary'):
+                op = value.get('has_summary')
+                col_ltr = value['col_letter']
+                from_cell = f'{col_ltr}{self.start_at_row + 2}'
+                to_cell = f'{col_ltr}{self.last_row + 1}'
+                formula = f'={op}({from_cell}:{to_cell})'
+                self._worksheet.write(
+                    row, col, formula, self._get_format(key))
+
+            col += 1
+
+        if self.autofilter:
+            keys = list(self.cols_setup.keys())
+            first_col = self.cols_setup[keys[0]].get('col_letter')
+            last_col = self.cols_setup[keys[-1]].get('col_letter')
+            filter_range = f'{first_col}{self.first_row}:{last_col}{self.last_row}'
+            self._worksheet.autofilter(filter_range)
