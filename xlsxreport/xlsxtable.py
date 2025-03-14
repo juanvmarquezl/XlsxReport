@@ -128,10 +128,12 @@ class XlsxTable:
 
 
     def _convert_cell_value(self, value, type):
-        if type == datetime:
-            return value
-        if isinstance(value, numbers.Number) and  math.isnan(value):
+        if isinstance(value, numbers.Number) and math.isnan(value):
             return None
+        if isinstance(value, datetime) and not value:
+            return None
+        if type == datetime and isinstance(value, datetime):
+            return value
         return type(value) if type else value
 
 
@@ -226,7 +228,7 @@ class XlsxTable:
         if not self.cols_setup and self.table_data:
             self.cols_setup = {k: {} for k in self.table_data[0].keys()}
         # Set table headers
-        if not self.headers and self.table_data:
+        if not self.headers:
             self.headers = list(self.cols_setup.keys())
         # Set columns width to default
         col = self.start_at_col
@@ -272,5 +274,5 @@ class XlsxTable:
             keys = list(self.cols_setup.keys())
             first_col = self.cols_setup[keys[0]].get('col_letter')
             last_col = self.cols_setup[keys[-1]].get('col_letter')
-            filter_range = f'{first_col}{self.first_row}:{last_col}{self.last_row}'
+            filter_range = f'{first_col}{self.first_row}:{last_col}{self.last_row + 1}'
             self._worksheet.autofilter(filter_range)
