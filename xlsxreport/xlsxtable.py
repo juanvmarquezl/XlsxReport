@@ -259,7 +259,7 @@ class XlsxTable:
         row = self.last_row + 1
         col = self.start_at_col
         for key, value in self.cols_setup.items():
-            if value.get('has_summary'):
+            if value.get('has_summary') and self.table_data:
                 op = value.get('has_summary')
                 col_ltr = value['col_letter']
                 from_cell = f'{col_ltr}{self.start_at_row + 2}'
